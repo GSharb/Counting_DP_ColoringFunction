@@ -1,7 +1,30 @@
 #################
 #
+#
 # 
-# This program is to show that Theorem 3 
+# This program is to show that Theorem 3 of 
+# "On Polynomial Representations of Dual DP Color Functions" by Jeffrey A. Mudrock
+# is true.
+#
+# Department of Mathematics and Statistics, University of South Alabama, Mobile, AL 36688. 
+# E-mail: mudrock@southalabama.edu
+#
+#
+# We assume for this program that $G = K_4$.
+#
+#
+# Incidence matrix for a $K_4$:
+# V1: 1 1 1 0 0 0
+# V2: 1 0 0 1 1 0
+# V3: 0 1 0 1 0 1
+# V4: 0 0 1 0 1 1
+#
+# E1: 0
+# E2: 0
+# E3: 0
+# E4: 1
+# E5: 1
+# E6: 1
 #
 #################
 
@@ -11,9 +34,9 @@ from tqdm import tqdm
 
 # 
 # params (num_rows, num_cols)
-# Creation of the incidence matrix. Asks the user to specify what vertices are connected between each edge
-# Returns a 2D Matrix
-#
+# Creation of the incidence matrix. Returns a 2D Matrix
+# 
+# 
 def incidenceM_Creation(num_rows, num_cols):
     # Initialize the incidence matrix with zeros
     matrix = [[0] * num_cols] * num_rows
@@ -31,15 +54,15 @@ def incidenceM_Creation(num_rows, num_cols):
             print("Error: Number of elements in the row does not match the number of columns.")
             return None
         matrix[i] = [int(val) for val in row]
-    print()
-        
+    print()   
     return matrix
 
 
 # 
 # params (num_rows)
-# Creation of the edge matrix. Asks the user to specify what edges to keep. 
-# Returns a 1D Matrix
+# Asks the user what edges they want to keep. Returns a 1D Matrix
+#
+# It is sufficient to check all covers for $sigma_1,2 1,3 1,4$ by [17]
 #
 def edgeID_Creation(num_rows):
     matrix = []
@@ -52,7 +75,7 @@ def edgeID_Creation(num_rows):
 
 #
 # params (n, length)
-# Takes in a range for the permutation should be
+# 
 #
 def generate_permutations(n, length):
     return [list(perm) for perm in iter.product(range(1, n + 1), repeat=length)]
@@ -60,10 +83,12 @@ def generate_permutations(n, length):
 
 #
 # params (m, num_vertices, num_edges, incidence_matrix, p_edges, colorings)
-# Takes in the fold number, vertices, edges, the incidence matrix, the permutation of edges, and every coloring.
-# Will then compute every coloring which succeeds.
-# Returns every good coloring, c.
+# 
+# 
+# 
 # TODO: Explain c is mathcal u
+#
+# 
 #
 def coloring_function(m, num_vertices, num_edges, incidence_matrix, p_edges, colorings):
     c = 0
@@ -82,50 +107,52 @@ def coloring_function(m, num_vertices, num_edges, incidence_matrix, p_edges, col
             c += 1
     return c
 
+#### DRIVER #####
 
-
-# Get the vertices and edges from the user
+# Ask |V(G)| and |E(G)| from the user
 num_vertices = int(input("Enter the number of vertices: "))
 num_edges = int(input("Enter the number of edges: "))
 
-# Get the graph
+# Ask the user for each $v \in V(G)$ which $e \in E(G)$ they have. 
 incidence_matrix = incidenceM_Creation(num_vertices, num_edges)
 #print(incidence_matrix)
 
-#Ask for the fold number from the user, 'm'
+# Asks the user for the m-fold cover of G.
 m = int(input("\nEnter the fold number: "))
-
-
-permutations = list(iter.permutations(range(1, m + 1)))
-#print(permutations)
 
 #p_edges = array2D_Creation(num_edges, m, "edge permutation")
 #print(p_edges)
 
 
-# Generate every possible coloring by taking the fold number and then the length of the permutation from the vertices
+# Generates every possible coloring permutation
 colorings = generate_permutations(m, num_vertices)
 #print(colorings)
 
-# D is the max
-# d is the min
+# D = $P_{DP}^*(G,m)$ which is the maximum number of colorings over all m-fold covers
+# d = $P_{DP}^*(G,m)$ which is the minumum number of colorings over all m-fold covers
 D = 0
 d = (m**num_vertices)
 
+# 
 permutations = list(iter.permutations(range(1, m + 1)))
 #print(permutations)
 
+# Asks the user which edges take on the identity permutation
 edges_id = edgeID_Creation(num_edges)
 edges_sum = 0 
 #print(edges_id)
 for i in range(num_edges):
     edges_sum += edges_id[i]
 
+
 L = generate_permutations(math.factorial(m), edges_sum)
 #print(L)
 
-
-p = [[0] * m] * num_edges #Cols and Rows
+#
+#  
+#
+#
+p = [[0] * m] * num_edges
 for i in tqdm (range(math.factorial(m)**edges_sum), desc="Calculating..."):
     for j in range(num_edges):
         count = 0
@@ -141,7 +168,3 @@ for i in tqdm (range(math.factorial(m)**edges_sum), desc="Calculating..."):
         d = c
 print(f'Max: {D}')
 print(f'Min: {d}')
-
-
-#print(f"Number of colorings: {fold_Num**num_vertices}")
-#print(f"Number of {fold_Num}-fold combinations: {m.factorial(fold_Num)**num_edges}")
