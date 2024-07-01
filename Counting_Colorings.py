@@ -90,7 +90,7 @@ def incidenceM_Creation(l, w):
         row = input(f"V{i + 1}: ").strip().split()
         if len(row) != w:
             print("Error: Number of elements in the row does not match the number of columns.") #TODO: Call the function again
-            return None
+            incidenceM_Creation(l, w)
         matrix[i] = [int(val) for val in row]
     print()   
     return matrix
