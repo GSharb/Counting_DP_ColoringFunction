@@ -83,7 +83,8 @@ def incidenceM_Creation(l, w):
     # Initialize the incidence matrix with zeros
     matrix = [[0] * w] * l
 
-    print("Enter the incidence matrix(one row at a time and space-seperated values):")
+    print("Enter the incidence matrix "
+          "(one row at a time and space-seperated values):")
     for cols in range(w):
         if (cols == 0):
             print(f"    E{cols + 1}", end=" ")
@@ -93,7 +94,8 @@ def incidenceM_Creation(l, w):
         print()
         row = input(f"V{i + 1}: ").strip().split()
         if len(row) != w:
-            print("Error: Number of elements in the row does not match the number of columns.\n")
+            print("Error: Number of elements in the row does "
+                  "not match the number of columns.\n")
             incidenceM_Creation(l, w)
             return None
         matrix[i] = [int(val) for val in row]
@@ -112,8 +114,8 @@ def incidenceM_Creation(l, w):
 #
 def edgeID_Creation(w):
     matrix = []
-    print("\nEnter the edges that will correspond to the identity permuation in the cover"
-          "('0' for identity, '1' otherwise): ")
+    print("\nEnter the edges that will correspond to the identity permuation "
+          "in the cover('0' for identity, '1' otherwise): ")
     for i in range(w):
         matrix.append(int(input(f"Edge {i + 1}: ")))
         print()
@@ -124,7 +126,8 @@ def edgeID_Creation(w):
 # the elements of $L(v)$ for each $v \in V(G)$.
 #
 def generate_colorings(n, length):
-    return [list(perm) for perm in iter.product(range(1, n + 1), repeat=length)]
+    return [list(perm) for perm in iter.product(range(1, n + 1), 
+                                                repeat=length)]
 
 #
 # Determines whether a coloring is proper.
