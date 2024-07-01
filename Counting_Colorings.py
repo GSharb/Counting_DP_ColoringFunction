@@ -5,7 +5,7 @@
 # 2.) Ask the user for the incidence matrix of $G$.
 # 3.) Asks the user for the value of $m$.
 # 4.) For each edge, $e = v_i v_j$ with $i < j$ the user indicates with a $0$ 
-#     that $\sigma_{i,j} will be fixed as the identity permutation for all 
+#     that $\sigma_{i,j}$ will be fixed as the identity permutation for all 
 #     full $m$-fold covers that the program considers, or the user 
 #     indicates with a $1$ that $\sigma_{i,j}$ is not fixed. 
 #
@@ -93,8 +93,9 @@ def incidenceM_Creation(l, w):
         print()
         row = input(f"V{i + 1}: ").strip().split()
         if len(row) != w:
-            print("Error: Number of elements in the row does not match the number of columns.")
+            print("Error: Number of elements in the row does not match the number of columns.\n")
             incidenceM_Creation(l, w)
+            return None
         matrix[i] = [int(val) for val in row]
     print()   
     return matrix
@@ -103,7 +104,7 @@ def incidenceM_Creation(l, w):
 # Returns a 1D Matrix
 # 
 # For each edge, $e = v_i v_j$ with $i < j$ the user indicates with a $0$ 
-#     that $\sigma_{i,j} will be fixed as the identity permutation for all 
+#     that $\sigma_{i,j}$ will be fixed as the identity permutation for all 
 #     full $m$-fold covers that the program considers, or the user 
 #     indicates with a $1$ that $\sigma_{i,j}$ is not fixed.
 # 
@@ -111,7 +112,8 @@ def incidenceM_Creation(l, w):
 #
 def edgeID_Creation(w):
     matrix = []
-    print(f"\nEnter the edges that will correspond to the identity permuation in the cover ('0' for identity, '1' otherwise): ")
+    print("\nEnter the edges that will correspond to the identity permuation in the cover"
+          "('0' for identity, '1' otherwise): ")
     for i in range(w):
         matrix.append(int(input(f"Edge {i + 1}: ")))
         print()
