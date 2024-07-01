@@ -2,7 +2,7 @@
 #
 #   GUIDE
 # 1.) Ask $|V(G)|$ and $|E(G)|$ from the user.
-# 2.) Ask the user for the incidence matrix of G.
+# 2.) Ask the user for the incidence matrix of $G$.
 # 3.) Asks the user for the value of $m$.
 # 4.) For each edge, $e = v_i v_j$ with $i < j$ the user indicates with a $0$ 
 #     that $\sigma_{i,j} will be fixed as the identity permutation for all 
@@ -18,8 +18,8 @@
 #     the program considers $(m!)^q$ full $m$-fold covers of $G$.
 #
 #   OUTPUT
-#     The first output will be the maximum number of colorings over all $m$-fold covers that the program considers.
-#     The second output will be the minimum number of colorings over all $m$-fold covers that the program considers.
+#     The first output will be the maximum number of proper colorings over all $m$-fold covers that the program considers.
+#     The second output will be the minimum number of proper colorings over all $m$-fold covers that the program considers.
 # 
 # To verify Theorem 3 for $m = 2,3,4,5$ use the following inputs:
 # 1.) Enter the number of vertices: 4
@@ -32,7 +32,7 @@
 #       V3: 0 1 0 1 0 1
 #       V4: 0 0 1 0 1 1
 #
-
+#
 #
 # 3.) Enter the fold number: m
 #
@@ -120,21 +120,15 @@ def edgeID_Creation(w):
 
 
 #
-# params (n, length)
-# 
+# Generates every possible coloring based on the second coordinates of 
+# the elements of $L(v)$ for each $v \in V(G)$.
 #
-def generate_permutations(n, length):
+def generate_colorings(n, length):
     return [list(perm) for perm in iter.product(range(1, n + 1), repeat=length)]
 
 
 #
-# params (m, v, e, incidence_matrix, p_edges, colorings)
-# 
-# 
-# 
-# TODO: Explain c is mathcal u
-#
-# 
+# Determines whether a coloring is proper.
 #
 def coloring_function(m, v, e, incidence_matrix, p_edges, colorings):
     c = 0
@@ -153,52 +147,57 @@ def coloring_function(m, v, e, incidence_matrix, p_edges, colorings):
             c += 1
     return c
 
-##### DRIVER ######
+##### DRIVER PROGRAM ######
 
-# Ask $|V(G)|$ and $|E(G)|$ from the user
+# Ask $|V(G)|$ and $|E(G)|$ from the user.
 v = int(input("Enter the number of vertices: "))
 e = int(input("Enter the number of edges: "))
 
-# Ask the user for each $v \in V(G)$ which $e \in E(G)$ they have. 
+# Ask the user for the incidence matrix of $G$.
 incidence_matrix = incidenceM_Creation(v, e)
-#print(incidence_matrix)
 
-# Asks the user for the m-fold cover of G.
+# Ask the user for the value of $m$.
 m = int(input("\nEnter the fold number: "))
 
 
-# Generates every possible coloring permutation
-colorings = generate_permutations(m, v)
+# Generates every possible coloring based on the second coordinates of 
+# the elements of $L(v)$ for each $v \in V(G)$.
+colorings = generate_colorings(m, v)
 
-# D = $P_{DP}^*(G,m)$ which is the maximum number of colorings over all m-fold covers for which an edge that got a 0 has its corresponding permutation in the cover.
-# d = $P_{DP}(G,m)$ which is the minumum number of colorings over all m-fold covers for which an edge that got a 0 has its corresponding permutation in the cover.
+# D is the maximum number of proper colorings over all $m$-fold covers that the program considers.
+# d is the minimum number of proper colorings over all $m$-fold covers that the program considers.
 D = 0
 d = (m**v)
 
+# Generates all permutations of $[m]$.
 permutations = list(iter.permutations(range(1, m + 1)))
 
 
-# Asks the user which edges take on the identity permutation
+# Enter the edges that will correspond to the identity permuation in the cover ('0' for identity, '1' otherwise):
 edges_id = edgeID_Creation(e)
-edges_sum = 0 
 
+# Determine the number of 1's entered by the user.
+q = 0 
 for i in range(e):
-    edges_sum += edges_id[i]
+    q += edges_id[i]
 
-
-L = generate_permutations(math.factorial(m), edges_sum)
-#print(L)
+# Generates all full $m$-fold covers that the program will consider.
+covers = generate_colorings(math.factorial(m), q)
 
 #
-#  
-#
+# Counts the number of proper $\mathcal{H}$-colorings of $G$ 
+# for each full $m$-fold cover, $\mathcal{H}$ of $G$, satisfying: 
+# for any edge $v_i v_j$ with $i < j$ that received a 0, 
+# $\mathcal{H}$ has $\sigma_{i,j}$ as the identity permutation.
+# Thus if $q$ is the number of 1's entered by the user,
+# the program considers $(m!)^q$ full $m$-fold covers of $G$. 
 #
 p = [[0] * m] * e
-for i in tqdm (range(math.factorial(m)**edges_sum), desc="Calculating..."):
+for i in tqdm (range(math.factorial(m)**q), desc="Calculating..."):
     for j in range(e):
         count = 0
         if edges_id[j]== 1:
-            p[j] = permutations[L[i][count] - 1]
+            p[j] = permutations[covers[i][count] - 1]
             count += 1
         else:
             p[j] = permutations[0]
@@ -207,5 +206,7 @@ for i in tqdm (range(math.factorial(m)**edges_sum), desc="Calculating..."):
         D = c
     if c < d:
         d = c
+
+# OUTPUTS
 print(f'Max: {D}')
 print(f'Min: {d}')
