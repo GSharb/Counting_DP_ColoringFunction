@@ -6,8 +6,8 @@
 # 3.) Asks the user for the value of $m$.
 # 4.) For each edge, $e = v_i v_j$ with $i < j$ the user indicates with a $0$ 
 #     that $\sigma_{i,j} will be fixed as the identity permutation for all 
-#     full $m$-fold covers that the program considers, or the user indicates with a $1$ 
-#     that $\sigma_{i,j}$ is not fixed. 
+#     full $m$-fold covers that the program considers, or the user 
+#     indicates with a $1$ that $\sigma_{i,j}$ is not fixed. 
 #
 #   PROCESS
 #     The program counts the number of proper $\mathcal{H}$-colorings of $G$ 
@@ -18,8 +18,11 @@
 #     the program considers $(m!)^q$ full $m$-fold covers of $G$.
 #
 #   OUTPUT
-#     The first output will be the maximum number of proper colorings over all $m$-fold covers that the program considers.
-#     The second output will be the minimum number of proper colorings over all $m$-fold covers that the program considers.
+#     The first output will be the maximum number of proper colorings 
+#     over all $m$-fold covers that the program considers.
+#
+#     The second output will be the minimum number of proper colorings 
+#     over all $m$-fold covers that the program considers.
 # 
 # To verify Theorem 3 for $m = 2,3,4,5$ use the following inputs:
 # 1.) Enter the number of vertices: 4
@@ -72,7 +75,8 @@ from tqdm import tqdm
 
 #
 # Creation of the incidence matrix of $G$. Returns a 2D Matrix.
-# When $G$ has $l$ vertices and $w$ edges, the user specifies $l$ and $w$ and then the incidence matrix.
+# When $G$ has $l$ vertices and $w$ edges, the user specifies $l$ and $w$
+# and then the incidence matrix.
 # 
 # 
 def incidenceM_Creation(l, w):
@@ -89,24 +93,19 @@ def incidenceM_Creation(l, w):
         print()
         row = input(f"V{i + 1}: ").strip().split()
         if len(row) != w:
-            print("Error: Number of elements in the row does not match the number of columns.") #TODO: Call the function again
+            print("Error: Number of elements in the row does not match the number of columns.")
             incidenceM_Creation(l, w)
         matrix[i] = [int(val) for val in row]
     print()   
     return matrix
-#
-#
-
-
-
 
 # 
 # Returns a 1D Matrix
 # 
 # For each edge, $e = v_i v_j$ with $i < j$ the user indicates with a $0$ 
 #     that $\sigma_{i,j} will be fixed as the identity permutation for all 
-#     full $m$-fold covers that the program considers, or the user indicates with a $1$ 
-#     that $\sigma_{i,j}$ is not fixed.
+#     full $m$-fold covers that the program considers, or the user 
+#     indicates with a $1$ that $\sigma_{i,j}$ is not fixed.
 # 
 # 
 #
@@ -118,14 +117,12 @@ def edgeID_Creation(w):
         print()
     return matrix
 
-
 #
 # Generates every possible coloring based on the second coordinates of 
 # the elements of $L(v)$ for each $v \in V(G)$.
 #
 def generate_colorings(n, length):
     return [list(perm) for perm in iter.product(range(1, n + 1), repeat=length)]
-
 
 #
 # Determines whether a coloring is proper.
@@ -164,8 +161,11 @@ m = int(input("\nEnter the fold number: "))
 # the elements of $L(v)$ for each $v \in V(G)$.
 colorings = generate_colorings(m, v)
 
-# D is the maximum number of proper colorings over all $m$-fold covers that the program considers.
-# d is the minimum number of proper colorings over all $m$-fold covers that the program considers.
+# D is the maximum number of proper colorings 
+# over all $m$-fold covers that the program considers.
+
+# d is the minimum number of proper colorings 
+# over all $m$-fold covers that the program considers.
 D = 0
 d = (m**v)
 
@@ -173,7 +173,8 @@ d = (m**v)
 permutations = list(iter.permutations(range(1, m + 1)))
 
 
-# Enter the edges that will correspond to the identity permuation in the cover ('0' for identity, '1' otherwise):
+# Enter the edges that will correspond to the identity permuation 
+# in the cover ('0' for identity, '1' otherwise):
 edges_id = edgeID_Creation(e)
 
 # Determine the number of 1's entered by the user.
