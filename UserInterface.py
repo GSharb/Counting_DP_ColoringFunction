@@ -1,18 +1,45 @@
 import tkinter as tk
+from ttkbootstrap import ttk
 import numpy as np
 
-class Interface:
-    def __init__(self, master):
-        self.master = master
-        master.title("Counting Colorings")
+## COLORS ##
 
-        self.label = tk.Label(master, text="GUI!").pack()
+USA_BLUE = '#00205B'
+USA_RED =  '#BF0D3E'
+WHITE =    '#FFFFFF'
 
-        self.addVertex_button = tk.Button(master, text="Add Row", command=master.quit).pack()
-        self.deleteVertex_button = tk.Button(master, text="Add Row", command=master.quit).pack()
 
-        self.entryWidgets = tk.Checkbutton(master,text="SAMPLE").pack()
 
-root = tk.Tk()
-my_gui = Interface(root)
-root.mainloop()
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        # Main Setup
+        self.title("Counting Colorings")
+        self.geometry("600x600")
+        self.minsize(600,600)
+        self.resizable(True, True)
+
+        # Widgets
+        self.topBar = TopBar(self)
+        self.vertex = VertexSection(self)
+
+        self.mainloop()
+
+class TopBar(ttk.Frame):
+        def __init__(self, parent):
+            super().__init__(parent)
+            
+            self.grid(row=0, column=0, sticky='NEW', columnspan=4)
+            self.columnconfigure(1, weight=1)
+            self.columnconfigure(2, weight=2)
+
+            ttk.Button(self, text= "Add Vertex").grid(row=0, column=0, sticky='WE')
+            ttk.Button(self, text= "Delete Vertex").grid(row=0, column=1, sticky='WE')
+
+class VertexSection(ttk.Frame):
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.place(anchor='n')
+
+app = App()
